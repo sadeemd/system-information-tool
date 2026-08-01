@@ -1,12 +1,23 @@
 import getpass
+import logging
 import platform
 import socket
 import uuid
 from datetime import datetime
 from pathlib import Path
 
-
 import psutil
+
+# Create logs directory
+logs_dir = Path("logs")
+logs_dir.mkdir(exist_ok=True)
+
+# Configure logging
+logging.basicConfig(
+    filename=logs_dir / "system_information.log",
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
 
 
 def get_computer_name() -> str:
@@ -63,7 +74,7 @@ def get_ip_address() -> str:
 def get_mac_address() -> str:
     """Return MAC address."""
     mac = uuid.getnode()
-    return ":".join(f"{(mac >> element) & 0xff:02X}" for element in range(40, -1, -8))
+    return ":".join(f"{(mac >> ele) & 0xff:02X}" for ele in range(40, -1, -8))
 
 
 def get_python_version() -> str:
@@ -78,22 +89,7 @@ def get_boot_time() -> str:
 
 
 def save_report(report: str) -> None:
-    """Save report to reports folder."""
-    from pathlib import Path
-
-    reports_folder = Path("reports")
-    reports_folder.mkdir(exist_ok=True)
-
-    file_name = datetime.now().strftime("Report_%Y-%m-%d_%H-%M.txt")
-    report_file = reports_folder / file_name
-
-    report_file.write_text(report, encoding="utf-8")
-
-    print(f"\nReport saved to: {report_file}")
-
-
-def save_report(report: str) -> None:
-    """Save the report inside reports folder."""
+    """Save report inside reports folder."""
 
     reports_dir = Path("reports")
     reports_dir.mkdir(exist_ok=True)
@@ -103,11 +99,15 @@ def save_report(report: str) -> None:
 
     report_path.write_text(report, encoding="utf-8")
 
+    logging.info("Report saved: %s", report_path)
+
     print(f"\nReport saved successfully:")
     print(report_path)
 
 
 def main() -> None:
+    logging.info("Application started")
+
     report = f"""
 ==================================================
             SYSTEM INFORMATION TOOL
@@ -117,20 +117,23 @@ Computer Name : {get_computer_name()}
 Username      : {get_username()}
 Operating Sys : {get_operating_system()}
 OS Version    : {get_os_version()}
-Processor      : {get_processor()}
-CPU Usage      : {get_cpu_usage()}%
-RAM            : {get_ram_usage()}
-Disk Usage     : {get_disk_usage()}
-IP Address     : {get_ip_address()}
-MAC Address    : {get_mac_address()}
-Python Version : {get_python_version()}
-Boot Time      : {get_boot_time()}
+Processor     : {get_processor()}
+CPU Usage     : {get_cpu_usage()}%
+RAM           : {get_ram_usage()}
+Disk Usage    : {get_disk_usage()}
+IP Address    : {get_ip_address()}
+MAC Address   : {get_mac_address()}
+Python Version: {get_python_version()}
+Boot Time     : {get_boot_time()}
 
-Generated At   : {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+Generated At  : {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 """
 
     print(report)
+
     save_report(report)
+
+    logging.info("Application finished")
 
 
 if __name__ == "__main__":
