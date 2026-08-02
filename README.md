@@ -1,26 +1,29 @@
 # 🖥️ System Information Tool
 
-A professional Python application that collects detailed system information and generates reports in TXT and JSON formats. The project follows clean code principles, modular architecture, and Python best practices.
+A professional Python application that collects detailed system information and generates well-formatted TXT and JSON reports. The project follows clean code principles, modular architecture, and Python best practices.
 
 ---
 
 ## 🚀 Features
 
-- Display computer name
-- Display current username
-- Display operating system and version
+- Display general system information
+- Display operating system details
 - Display processor information
 - Display CPU usage
 - Display RAM usage
 - Display disk usage
 - Display IP address
 - Display MAC address
+- Display battery information
 - Display Python version
 - Display system boot time
-- Generate TXT reports
-- Generate JSON reports (`--json`)
+- Generate formatted TXT reports
+- Generate JSON reports
 - Application logging
-- Organized project structure
+- Clean project architecture
+- Cross-platform file handling using `pathlib`
+- Modular output formatter
+- Unit testing with `pytest`
 
 ---
 
@@ -30,7 +33,7 @@ A professional Python application that collects detailed system information and 
 - psutil
 - pathlib
 - logging
-- argparse
+- pytest
 - json
 - socket
 - platform
@@ -40,19 +43,23 @@ A professional Python application that collects detailed system information and 
 
 ## 📂 Project Structure
 
-```
+```text
 System-Information-Tool/
 │
 ├── assets/
 ├── logs/
 │   └── system_information.log
 ├── reports/
-│   ├── Report_YYYY-MM-DD_HH-MM.txt
-│   └── Report_YYYY-MM-DD_HH-MM.json
+│   ├── system_report_YYYY-MM-DD_HH-MM-SS.txt
+│   └── system_report_YYYY-MM-DD_HH-MM-SS.json
 ├── src/
+│   ├── formatter.py
 │   ├── logger.py
 │   ├── report.py
 │   └── system_info.py
+├── tests/
+│   ├── conftest.py
+│   └── test_system_info.py
 ├── main.py
 ├── requirements.txt
 ├── README.md
@@ -81,15 +88,13 @@ Create a virtual environment:
 python -m venv .venv
 ```
 
-Activate the virtual environment:
-
-### Windows PowerShell
+Activate it (Windows PowerShell):
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-Install dependencies:
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -105,42 +110,51 @@ Run the application:
 python main.py
 ```
 
-Generate TXT + JSON reports:
-
-```bash
-python main.py --json
-```
+The application automatically generates both TXT and JSON reports inside the `reports` folder.
 
 ---
 
 ## 📄 Example Output
 
-```
-=======================================================
-SYSTEM INFORMATION TOOL
-=======================================================
+```text
+============================================================
+                  SYSTEM INFORMATION TOOL
+============================================================
 
-Computer Name : DESKTOP-XXXX
-Username      : User
-Operating Sys : Windows
-OS Version    : 11
-Processor     : Intel(R) Core(TM)
-CPU Usage     : 12%
-RAM           : 9.3 GB / 16 GB
-Disk Usage    : 210 GB / 512 GB
-IP Address    : 192.168.1.5
-MAC Address   : XX:XX:XX:XX:XX:XX
-Python Version: 3.12
-Boot Time     : 2026-08-02 08:15:32
+==================== General ====================
+Computer Name     : LAPTOP-XXXX
+Username          : User
+
+==================== Operating System ====================
+Operating System  : Windows
+OS Version        : 11
+
+==================== Hardware ====================
+Processor         : Intel(R) Core(TM)
+CPU Usage         : 12%
+RAM               : 9.3 GB / 16 GB
+Disk Usage        : 210 GB / 512 GB
+
+==================== Network ====================
+IP Address        : 192.168.1.5
+MAC Address       : XX:XX:XX:XX:XX:XX
+
+==================== Battery ====================
+Battery Level     : 97%
+Battery Status    : Charging
+Battery Time Left : Unknown
+
+==================== Software ====================
+Python Version    : 3.12
 ```
 
 ---
 
-## Screenshots
+## 📷 Screenshots
 
-### Main Window
+### Terminal Output
 
-![Main Window](assets/main-window.png)
+![Terminal Output](assets/terminal-output.png)
 
 ### TXT Report
 
@@ -156,7 +170,17 @@ Boot Time     : 2026-08-02 08:15:32
 
 ### Project Structure
 
-![Structure](assets/project-structure.png)
+![Project Structure](assets/project-structure.png)
+
+---
+
+## 🧪 Running Tests
+
+Run all tests using:
+
+```bash
+pytest
+```
 
 ---
 
@@ -164,9 +188,9 @@ Boot Time     : 2026-08-02 08:15:32
 
 - Export reports as PDF
 - Export reports as Excel
+- Display detailed network adapter information
+- Display GPU information
 - Colorized terminal output
-- Hardware information
-- Network adapter details
 - Email report feature
 - Scheduled automatic reports
 - GUI version using CustomTkinter
