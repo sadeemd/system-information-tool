@@ -1,49 +1,42 @@
-import argparse
 
+from src.formatter import format_system_info
 from src.logger import setup_logger
 from src.report import save_json, save_txt
 from src.system_info import get_system_info
 
+# Configure logger
 logger = setup_logger()
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="System Information Tool"
-    )
+    logger.info("Application Started")
 
-    parser.add_argument(
-        "--json",
-        action="store_true",
-        help="Save report as JSON",
-    )
-
-    args = parser.parse_args()
-
-    logger.info("Application started")
-
+    # Get system information
     info = get_system_info()
 
-    print("=" * 55)
-    print("SYSTEM INFORMATION TOOL")
-    print("=" * 55)
+    print("=" * 60)
+    print("SYSTEM INFORMATION TOOL".center(60))
+    print("=" * 60)
 
-    for key, value in info.items():
-        print(f"{key:18}: {value}")
+    print(format_system_info(info))
 
+    # Save TXT report
     txt_report = save_txt(info)
-
     logger.info("TXT report saved: %s", txt_report)
 
-    print(f"\nTXT Report: {txt_report}")
+    # Save JSON report
+    json_report = save_json(info)
+    logger.info("JSON report saved: %s", json_report)
 
-    if args.json:
-        json_report = save_json(info)
-        logger.info("JSON report saved: %s", json_report)
-        print(f"JSON Report: {json_report}")
+    print("\nReports Generated Successfully")
+    print(f"TXT  : {txt_report}")
+    print(f"JSON : {json_report}")
 
-    logger.info("Application finished")
+    logger.info("Application Closed")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        logger.exception("Unexpected error occurred.")
