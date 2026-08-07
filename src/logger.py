@@ -1,15 +1,42 @@
+
 import logging
 from pathlib import Path
 
 
-def setup_logger():
-    logs_dir = Path("logs")
-    logs_dir.mkdir(exist_ok=True)
+BASE_DIR = Path(__file__).resolve().parent.parent
+LOGS_DIR = BASE_DIR / "logs"
+LOG_FILE = LOGS_DIR / "system_information.log"
 
-    logging.basicConfig(
-        filename=logs_dir / "system_information.log",
-        level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(message)s",
+
+def setup_logger():
+    """
+    Configure and return the application logger.
+    """
+
+    LOGS_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
     )
 
-    return logging.getLogger(__name__)
+    logger = logging.getLogger(
+        "system_information_tool"
+    )
+
+    logger.setLevel(logging.INFO)
+
+    if logger.handlers:
+        return logger
+
+    file_handler = logging.FileHandler(
+        LOG_FILE,
+        encoding="utf-8",
+    )
+
+    formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)s | %(message)s"
+    )
+
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    return logger
